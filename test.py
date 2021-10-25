@@ -10,29 +10,29 @@ subprocess_return = subprocess1.stdout.read()
 splitNewLine = str(subprocess_return).split("\\n")
 #print (var)
 lineAttributeList = list()
-for i in splitNewLine:
+for line in splitNewLine:
     # print (i.split(" "))
-    lineAttributeList.append(i.split(" "))
+    lineAttributeList.append(line.split(" "))
 #print(lineAttributeList)
 
 found = False
 ticketNumber = list()
 versionNumber = []
 
-for j in lineAttributeList:
-    for k in j:
+for lineAttribute in lineAttributeList:
+    for attribute in lineAttribute:
         #print (k)
-        if "Merged" == k:
+        if "Merged" == attribute:
             found = True
-        if "[" in k and found == False:
-            #print (k)
-            ticket = k.replace("[", "")
+        if "[" in attribute and found == False:
+            #print (attribute)
+            ticket = attribute.replace("[", "")
             ticket = ticket.replace("]", "")
             ticketNumber.append(ticket)
             #print (ticket)
-        if found == True and "v1" in k and ")" not in k:
+        if found == True and "v1" in attribute and ")" not in attribute:
             #print (k.split(")")[0])
-            versionNumber.append(k)
+            versionNumber.append(attribute)
             break
     # if found == True:
     #     break 
