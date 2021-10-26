@@ -41,6 +41,15 @@ Additional Questions
 The following additional questions are to get a better insight into how you make software engineering decisions. 
 We don't expect more than a short paragraph for each of these questions. 
 Please include these questions as part of the submission readme or email:
+
 1. Describe a way you could help protect against regression issues when the associated bash scripts are changed.
+The scripts must atleast follow the same syntax for tickets and version number.
+For version number, we can use an iterator and take number of versions as input for test.py to cater v2 and beyond.
+
 2. How would you recommend this python script be utilised?
-3. Suggest an alternative approach to achieve a similar result as this script 
+Can be utilized in CICD pipelines where we integrate git with tools/services like jenkins and AWS Codebuild.
+For instance, for every merge, pipeline will run test.py and email its output. It is essential not to do a squash merge on a Pull Request to keep track of all commits and tickets numbers.
+
+3. Suggest an alternative approach to achieve a similar result as this script
+We can create dynamic functions to cater tickets and version Number. We can use regex instead of simple replace/append/split functions. 
+We can also use only one bash script to send parsed git log --oneline output directly to an email or an endpoint. 

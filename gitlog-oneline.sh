@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "c2ff68be2 (HEAD -> develop) [ABC-3426] Enabled feature
 933bd4f04 [ABC-3426] Bugfixes from QA
 13ebcca79 [ABC-3426] Final work on feature
