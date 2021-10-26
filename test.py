@@ -2,45 +2,43 @@
 # Passing those along with an updated version string into the release script
 import subprocess
 
-file1= open("gitlog-oneline.sh","r+")
+try:
+    # Opening file to read
+    file1= open("gitlog-oneline.sh","r")
 
-subprocess1 = subprocess.Popen(str(file1.read()), shell=True, stdout=subprocess.PIPE)
-subprocess_return = subprocess1.stdout.read()
+    # Reading output of gitlog-oneline.sh
+    subprocess1 = subprocess.Popen(str(file1.read()), shell=True, stdout=subprocess.PIPE)
+    subprocess_return = subprocess1.stdout.read()
 
-splitNewLine = str(subprocess_return).split("\\n")
-#print (var)
-lineAttributeList = list()
-for line in splitNewLine:
-    # print (i.split(" "))
-    lineAttributeList.append(line.split(" "))
-#print(lineAttributeList)
+    # Splitting each line
+    splitNewLine = str(subprocess_return).split("\\n")
+    lineAttributeList = list()
 
-found = False
-ticketNumber = list()
-versionNumber = []
+    # Loop to further split each line based on spaces
+    for line in splitNewLine:
+        lineAttributeList.append(line.split(" "))
 
-for lineAttribute in lineAttributeList:
-    for attribute in lineAttribute:
-        #print (k)
-        if "Merged" == attribute:
-            found = True
-        if "[" in attribute and found == False:
-            #print (attribute)
-            ticket = attribute.replace("[", "")
-            ticket = ticket.replace("]", "")
-            ticketNumber.append(ticket)
-            #print (ticket)
-        if found == True and "v1" in attribute and ")" not in attribute:
-            #print (k.split(")")[0])
-            versionNumber.append(attribute)
-            break
-    # if found == True:
-    #     break 
+    found = False
+    ticketNumber = list()
+    versionNumber = []
 
-#print (list(set(ticketNumber)))
-#print (versionNumber[0])
+    # Iterating for tickets and versionNumber
+    for lineAttribute in lineAttributeList:
+        for attribute in lineAttribute:
+            if "Merged" == attribute:
+                found = True
+            if "[" in attribute and found == False:
+                # Filtering ticketNumber on the basis of square bracket
+                ticket = attribute.replace("[", "")
+                ticket = ticket.replace("]", "")
+                ticketNumber.append(ticket)
+            # Find version number starting from v1, ignore the one that ends with closing round bracket
+            if found == True and "v1" in attribute and ")" not in attribute:
+                versionNumber.append(attribute)
+                break
 
-# subprocess.call(["ls", "-l"])
+    # Sending incremented version number string and a list of the filtered ticket numbers as input
+    subprocess.call(["bash" , "release-add-tickets.sh", str(versionNumber[0]), str(list(set(ticketNumber)))])
 
-subprocess.call(["bash" , "release-add-tickets.sh", str(versionNumber[0]), str(list(set(ticketNumber)))])
-#Process = subprocess.Popen('./release-add-tickets.sh %s %s' % (str(versionNumber[0]),str(list(set(ticketNumber))),), shell=True)
+except Exception as err:
+    print("Exception found!\n" + str(err))
